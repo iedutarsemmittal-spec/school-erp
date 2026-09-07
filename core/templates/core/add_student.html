@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Admission - Guru Nanak ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar { background: #1e293b; color: white; min-height: 100vh; position: fixed; width: 260px; top: 0; left: 0; padding-top: 20px; }
+        .sidebar a { color: #cbd5e1; text-decoration: none; display: block; padding: 12px 20px; font-weight: 500; border-radius: 6px; margin: 4px 10px; }
+        .sidebar a:hover, .sidebar a.active { background: #4f46e5; color: white; }
+        .main-content { margin-left: 260px; padding: 30px; }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <h4 class="text-center fw-bold text-white mb-4"><i class="fa-solid fa-graduation-cap text-warning me-2"></i>Guru Nanak ERP</h4>
+    <a href="/"><i class="fa-solid fa-chart-pie me-2"></i>Dashboard</a>
+    <a href="/add-student/" class="active"><i class="fa-solid fa-user-plus me-2"></i>Student Admission</a>
+    <a href="/classes/"><i class="fa-solid fa-school me-2"></i>Classes & Sections</a>
+    <a href="/subjects/"><i class="fa-solid fa-book me-2"></i>Subjects</a>
+    <a href="/school-info/"><i class="fa-solid fa-gear me-2"></i>School Info</a>
+</div>
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-dark mb-0">Student Admission Form</h3>
+        <a href="/" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard</a>
+    </div>
+
+    <div class="card border-0 shadow-sm p-4 bg-white">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h5 class="text-primary fw-bold mb-3"><i class="fa-solid fa-user-graduate me-2"></i>Basic Details</h5>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Registration No. *</label>
+                    <input type="text" name="registration_no" class="form-control" placeholder="e.g. REG-001" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">First Name *</label>
+                    <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Last Name</label>
+                    <input type="text" name="last_name" class="form-control" placeholder="Last Name">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Class *</label>
+                    <select name="class_name" class="form-select" required>
+                        <option value="">Select Class</option>
+                        {% for c in classes %}
+                        <option value="{{ c.class_name }}">{{ c.class_name }} {% if c.section %}- {{ c.section }}{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Section</label>
+                    <input type="text" name="section" class="form-control" placeholder="Section">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Roll Number</label>
+                    <input type="number" name="roll_no" class="form-control" placeholder="Roll No">
+                </div>
+            </div>
+
+            <h5 class="text-success fw-bold mb-3"><i class="fa-solid fa-users me-2"></i>Parent & Contact Info</h5>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Father's Name</label>
+                    <input type="text" name="father_name" class="form-control" placeholder="Father Name">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Mother's Name</label>
+                    <input type="text" name="mother_name" class="form-control" placeholder="Mother Name">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Phone Number *</label>
+                    <input type="text" name="phone_number" class="form-control" placeholder="Mobile Number" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Address</label>
+                    <textarea name="address" class="form-control" rows="2" placeholder="Full Address"></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success fw-semibold px-4 py-2"><i class="fa-solid fa-check me-2"></i>Submit Admission</button>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notice & WhatsApp Broadcast</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light p-3">
+{% include "core/header.html" %}
+<div class="container bg-white p-4 rounded shadow-sm">
+    <h3 class="fw-bold mb-4"><i class="bi bi-megaphone text-warning"></i> Send Messages & School Notices</h3>
+
+    {% if messages %}{% for m in messages %}<div class="alert alert-success">{{ m }}</div>{% endfor %}{% endif %}
+
+    <form method="POST" class="mb-4 p-3 bg-light rounded border">
+        {% csrf_token %}
+        <div class="row g-2 mb-2">
+            <div class="col-md-4">
+                <select name="target_group" class="form-select">
+                    <option value="All">All (Students & Staff)</option>
+                    <option value="Students">Students Only</option>
+                    <option value="Staff">Staff Only</option>
+                </select>
+            </div>
+            <div class="col-md-8"><input type="text" name="title" class="form-control" placeholder="Notice Title / Topic" required></div>
+        </div>
+        <div class="mb-2"><textarea name="message" class="form-control" rows="3" placeholder="Type notice message here..." required></textarea></div>
+        <button type="submit" class="btn btn-warning fw-bold"><i class="bi bi-broadcast"></i> Publish Notice</button>
+    </form>
+
+    <h5>Published Notices History</h5>
+    <div class="list-group">
+        {% for n in notices %}
+        <div class="list-group-item">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1 fw-bold">{{ n.title }}</h5>
+                <small class="text-muted">{{ n.created_at }}</small>
+            </div>
+            <p class="mb-1">{{ n.message }}</p>
+            <span class="badge bg-primary">Target: {{ n.target_group }}</span>
+        </div>
+        {% empty %}
+        <p class="text-muted">No notices posted yet.</p>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

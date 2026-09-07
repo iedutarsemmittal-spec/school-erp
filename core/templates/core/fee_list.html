@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fees & Pending Ledger</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light p-3">
+{% include "core/header.html" %}
+<div class="container bg-white p-4 rounded shadow-sm">
+    <h3 class="fw-bold mb-4"><i class="bi bi-currency-rupee text-success"></i> Fees Management & Pending Dues</h3>
+
+    {% if messages %}{% for m in messages %}<div class="alert alert-success">{{ m }}</div>{% endfor %}{% endif %}
+
+    <form method="POST" class="row g-2 mb-4 p-3 bg-light rounded border">
+        {% csrf_token %}
+        <div class="col-md-4">
+            <select name="student_id" class="form-select" required>
+                <option value="">Select Student</option>
+                {% for st in students %}<option value="{{ st.id }}">{{ st }}</option>{% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3"><input type="number" name="total_amount" class="form-control" placeholder="Total Fees (Default 10000)" value="10000"></div>
+        <div class="col-md-3"><input type="number" name="amount_paid" class="form-control" placeholder="Amount Paid Now (₹)" required></div>
+        <div class="col-md-2"><button type="submit" class="btn btn-success w-100">Update Fee</button></div>
+    </form>
+
+    <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Student</th>
+                <th>Total Fee</th>
+                <th>Paid Amount</th>
+                <th>Pending Due</th>
+                <th>Status</th>
+                <th>WhatsApp Alert</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in fee_records %}
+            <tr>
+                <td class="fw-bold">{{ f.student }}</td>
+                <td>₹ {{ f.total_amount }}</td>
+                <td class="text-success fw-bold">₹ {{ f.amount_paid }}</td>
+                <td class="text-danger fw-bold">₹ {{ f.pending_amount }}</td>
+                <td>
+                    {% if f.is_paid %}
+                    <span class="badge bg-success">Paid</span>
+                    {% else %}
+                    <span class="badge bg-danger">Due</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not f.is_paid %}
+                    <a href="https://api.whatsapp.com/send?phone={{ f.student.contact_number }}&text=Dear%20Parent,%20Fees%20due%20amount%20for%20{{ f.student.first_name }}%20is%20Rs.{{ f.pending_amount }}.%20Please%20pay." target="_blank" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-whatsapp"></i> Send Due Alert
+                    </a>
+                    {% else %}
+                    <span class="text-muted">No Due</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted">No fee records found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

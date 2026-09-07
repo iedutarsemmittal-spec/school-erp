@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guru Nanak Sr Sec School - eSkooly ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar { background: #1e293b; color: white; min-height: 100vh; position: fixed; width: 260px; top: 0; left: 0; padding-top: 20px; overflow-y: auto; }
+        .sidebar a { color: #cbd5e1; text-decoration: none; display: block; padding: 10px 20px; font-weight: 500; border-radius: 6px; margin: 2px 10px; font-size: 14px; }
+        .sidebar a:hover, .sidebar a.active { background: #4f46e5; color: white; }
+        .main-content { margin-left: 260px; padding: 30px; }
+        .card-box { border: none; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h4 class="text-center fw-bold text-white mb-3" style="font-size: 18px;"><i class="fa-solid fa-graduation-cap text-warning me-2"></i>Guru Nanak ERP</h4>
+    <a href="/" class="active"><i class="fa-solid fa-chart-pie me-2"></i>Dashboard</a>
+    <a href="/add-student/"><i class="fa-solid fa-user-plus me-2"></i>Student Admission</a>
+    <a href="/classes/"><i class="fa-solid fa-school me-2"></i>Classes & Sections</a>
+    <a href="/subjects/"><i class="fa-solid fa-book me-2"></i>Subjects</a>
+    <a href="/submit-fees/"><i class="fa-solid fa-money-bill-wave me-2"></i>Submit Fees</a>
+    <a href="/fee-particulars/"><i class="fa-solid fa-receipt me-2"></i>Fee Particulars</a>
+    <a href="/mark-attendance/"><i class="fa-solid fa-calendar-check me-2"></i>Mark Attendance</a>
+    <a href="/employees/"><i class="fa-solid fa-users-gear me-2"></i>Staff & Payroll</a>
+    <a href="/exam-marks/"><i class="fa-solid fa-award me-2"></i>Exam Marks</a>
+    <a href="/school-info/"><i class="fa-solid fa-gear me-2"></i>School Info</a>
+    <hr class="border-secondary mx-3 my-2">
+    <a href="/export-students/"><i class="fa-solid fa-file-excel text-success me-2"></i>Export Students Excel</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0">Dashboard</h3>
+            <p class="text-muted">Welcome to Guru Nanak Sr Sec School Portal</p>
+        </div>
+        <div>
+            <button class="btn btn-success fw-semibold" data-bs-toggle="modal" data-bs-target="#importModal">
+                <i class="fa-solid fa-file-import me-2"></i>Import Students Excel
+            </button>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Stat Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card card-box p-4 bg-white border-start border-primary border-4">
+                <h6 class="text-muted">Total Students</h6>
+                <h2 class="fw-bold text-dark mb-0">{{ total_students }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-box p-4 bg-white border-start border-success border-4">
+                <h6 class="text-muted">Total Employees</h6>
+                <h2 class="fw-bold text-dark mb-0">{{ total_employee }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-box p-4 bg-white border-start border-warning border-4">
+                <h6 class="text-muted">Total Classes</h6>
+                <h2 class="fw-bold text-dark mb-0">{{ total_classes }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Excel Import Modal -->
+<div class="modal fade" id="importModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="/import-students/" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Students Excel (.xlsx)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Select Excel File</label>
+                        <input type="file" name="excel_file" class="form-control" accept=".xlsx" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Upload & Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

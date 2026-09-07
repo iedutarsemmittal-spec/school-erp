@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light p-3">
+{% include "core/header.html" %}
+<div class="container bg-white p-4 rounded shadow-sm">
+    <h3 class="fw-bold mb-4"><i class="bi bi-person-badge text-primary"></i> Staff Management (Teaching & Non-Teaching)</h3>
+
+    {% if messages %}{% for m in messages %}<div class="alert alert-success">{{ m }}</div>{% endfor %}{% endif %}
+
+    <!-- Add Staff Form -->
+    <form method="POST" class="row g-2 mb-4 p-3 bg-light rounded border">
+        {% csrf_token %}
+        <div class="col-md-3"><input type="text" name="name" class="form-control" placeholder="Full Name" required></div>
+        <div class="col-md-2">
+            <select name="staff_type" class="form-select">
+                <option value="Teaching">Teaching</option>
+                <option value="Non-Teaching">Non-Teaching</option>
+            </select>
+        </div>
+        <div class="col-md-2"><input type="text" name="designation" class="form-control" placeholder="Designation (e.g. Peon/Teacher)" required></div>
+        <div class="col-md-2"><input type="text" name="contact" class="form-control" placeholder="Contact No" required></div>
+        <div class="col-md-2"><input type="number" name="basic_salary" class="form-control" placeholder="Basic Salary (₹)" required></div>
+        <div class="col-md-1"><button type="submit" class="btn btn-primary w-100">Add</button></div>
+    </form>
+
+    <!-- Staff Table -->
+    <table class="table table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Designation</th>
+                <th>Contact</th>
+                <th>Salary</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in staff_members %}
+            <tr>
+                <td class="fw-bold">{{ s.name }}</td>
+                <td><span class="badge {% if s.staff_type == 'Teaching' %}bg-info{% else %}bg-secondary{% endif %}">{{ s.staff_type }}</span></td>
+                <td>{{ s.designation }}</td>
+                <td>{{ s.contact }}</td>
+                <td>₹ {{ s.basic_salary }}</td>
+                <td>
+                    <a href="https://api.whatsapp.com/send?phone={{ s.contact }}&text=Hello%20{{ s.name }}" target="_blank" class="btn btn-sm btn-success me-1"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                    <a href="/delete-staff/{{ s.id }}/" onclick="return confirm('Delete Staff?')" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted">No staff members added yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

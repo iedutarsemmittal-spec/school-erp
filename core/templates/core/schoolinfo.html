@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>School Info - Guru Nanak ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar { background: #1e293b; color: white; min-height: 100vh; position: fixed; width: 260px; top: 0; left: 0; padding-top: 20px; }
+        .sidebar a { color: #cbd5e1; text-decoration: none; display: block; padding: 12px 20px; font-weight: 500; border-radius: 6px; margin: 4px 10px; }
+        .sidebar a:hover, .sidebar a.active { background: #4f46e5; color: white; }
+        .main-content { margin-left: 260px; padding: 30px; }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <h4 class="text-center fw-bold text-white mb-4"><i class="fa-solid fa-graduation-cap text-warning me-2"></i>Guru Nanak ERP</h4>
+    <a href="/"><i class="fa-solid fa-chart-pie me-2"></i>Dashboard</a>
+    <a href="/add-student/"><i class="fa-solid fa-user-plus me-2"></i>Student Admission</a>
+    <a href="/classes/"><i class="fa-solid fa-school me-2"></i>Classes & Sections</a>
+    <a href="/subjects/"><i class="fa-solid fa-book me-2"></i>Subjects</a>
+    <a href="/school-info/" class="active"><i class="fa-solid fa-gear me-2"></i>School Info</a>
+</div>
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-dark mb-0">School Settings & Profile</h3>
+        <a href="/" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard</a>
+    </div>
+
+    <div class="card border-0 shadow-sm p-4 bg-white col-md-8 mx-auto">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label fw-bold">School Name *</label>
+                <input type="text" name="name" class="form-control" value="{{ school.name }}" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Phone Number</label>
+                    <input type="text" name="phone" class="form-control" value="{{ school.phone|default:'' }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Email Address</label>
+                    <input type="email" name="email" class="form-control" value="{{ school.email|default:'' }}">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Address</label>
+                <textarea name="address" class="form-control" rows="3">{{ school.address|default:'' }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary fw-semibold px-4">Update School Profile</button>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

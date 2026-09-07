@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fee Particulars - Guru Nanak ERP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar { background: #1e293b; color: white; min-height: 100vh; position: fixed; width: 260px; top: 0; left: 0; padding-top: 20px; }
+        .sidebar a { color: #cbd5e1; text-decoration: none; display: block; padding: 10px 20px; font-weight: 500; border-radius: 6px; margin: 2px 10px; font-size: 14px; }
+        .sidebar a:hover, .sidebar a.active { background: #4f46e5; color: white; }
+        .main-content { margin-left: 260px; padding: 30px; }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <h4 class="text-center fw-bold text-white mb-3" style="font-size: 18px;"><i class="fa-solid fa-graduation-cap text-warning me-2"></i>Guru Nanak ERP</h4>
+    <a href="/"><i class="fa-solid fa-chart-pie me-2"></i>Dashboard</a>
+    <a href="/add-student/"><i class="fa-solid fa-user-plus me-2"></i>Student Admission</a>
+    <a href="/classes/"><i class="fa-solid fa-school me-2"></i>Classes & Sections</a>
+    <a href="/subjects/"><i class="fa-solid fa-book me-2"></i>Subjects</a>
+    <a href="/submit-fees/"><i class="fa-solid fa-money-bill-wave me-2"></i>Submit Fees</a>
+    <a href="/fee-particulars/" class="active"><i class="fa-solid fa-receipt me-2"></i>Fee Particulars</a>
+    <a href="/mark-attendance/"><i class="fa-solid fa-calendar-check me-2"></i>Mark Attendance</a>
+    <a href="/employees/"><i class="fa-solid fa-users-gear me-2"></i>Staff & Payroll</a>
+    <a href="/exam-marks/"><i class="fa-solid fa-award me-2"></i>Exam Marks</a>
+    <a href="/school-info/"><i class="fa-solid fa-gear me-2"></i>School Info</a>
+</div>
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-dark mb-0">Fee Heads / Particulars</h3>
+        <a href="/" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 bg-white">
+                <h5 class="fw-bold mb-3">Add Fee Head</h5>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Title *</label>
+                        <input type="text" name="title" class="form-control" placeholder="e.g. Tuition Fee, Annual Charges" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-semibold">Save Particular</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm p-4 bg-white">
+                <h5 class="fw-bold mb-3">Existing Fee Particulars</h5>
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in particulars %}
+                        <tr>
+                            <td class="fw-bold">{{ p.title }}</td>
+                            <td>{{ p.description|default:"-" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">No fee particulars added yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
